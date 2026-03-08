@@ -2,7 +2,7 @@ import hashlib
 
 def generate_hash(text, algorithm='sha256'):
     """
-    Generate a hash of the input text using the specified algorithm.
+    Generate a hash of the input text using the specified 
     
     Args:
         text (str): The text to hash
