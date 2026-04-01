@@ -1,26 +1,31 @@
-import hashlib
+from argon2 import PasswordHasher
 
-def generate_hash(text, algorithm='sha256'):
+def generate_hash(text, algorithm='argon2id'):
     """
     Generate a hash of the input text using the specified 
     
     Args:
         text (str): The text to hash
-        algorithm (str): The hash algorithm to use (default: 'sha256')
+        algorithm (str): The hash algorithm to use (default: 'argon2id')
     
     Returns:
-        str: Hexadecimal hash string
+        str: Hash string
     """
-    hash_obj = hashlib.new(algorithm)
-    hash_obj.update(text.encode('utf-8'))
-    return hash_obj.hexdigest()
+    if algorithm == 'argon2id':
+        hasher = PasswordHasher()
+        return hasher.hash(text)
+    else:
+        raise ValueError(f"Unsupported algorithm: {algorithm}")
 
 
 if __name__ == "__main__":
-    # Example usage
-    text = "Hello, World!"
+    # Interactive hash generator
+    text = input("Enter text to hash:" )
+    algorithm = input("Enter algorithm (default: argon2id): ") or 'argon2id'
     
-    print(f"Original text: {text}")
-    print(f"SHA256: {generate_hash(text, 'sha256')}")
-    print(f"SHA512: {generate_hash(text, 'sha512')}")
-    print(f"MD5: {generate_hash(text, 'md5')}")
+    try:
+        print(f"Original text: {text}")
+        hash_result = generate_hash(text, algorithm)
+        print(f"{algorithm}: {hash_result}")
+    except ValueError as e:
+        print(f"Error: {e}")
